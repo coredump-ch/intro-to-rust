@@ -1,13 +1,112 @@
 \documentclass{beamer}
+
+\usepackage{minted}
+
 \usetheme{metropolis}
-\title{A minimal example}
+
+\title{Intro To Rust}
 \date{\today}
-\author{Matthias Vogelgesang}
-\institute{Centre for Modern Beamer Themes}
+\author{Danilo Bargen, Raphael Nestler}
+\institute{Coredump Rapperswil}
+
 \begin{document}
-  \maketitle
-  \section{First Section}
-  \begin{frame}{First Frame}
-    Hello, world!
-  \end{frame}
+
+\maketitle
+
+\section{What is Rust?}
+
+\begin{frame}{What is Rust?}
+	\begin{quote}
+		«Rust is a systems programming language\\
+		that runs blazingly fast, prevents nearly all segfaults,\\
+		and guarantees thread safety.»\\
+		\vspace{0.5em}
+		{\normalfont \small www.rust-lang.org}
+	\end{quote}
+\end{frame}
+
+\begin{frame}{What's wrong with systems languages?}
+	\begin{itemize}
+		\item It's difficult to write secure code.
+		\item It's very difficult to write multithreaded code.
+	\end{itemize}
+	These are the problems Rust was made to address.
+\end{frame}
+
+\begin{frame}{Quick Facts about Rust}
+	(As of September 2015)
+	\begin{itemize}
+		\item Started by Mozilla employee Graydon Hoare
+		\item First announced by Mozilla in 2010
+		\item Community driven development
+		\item First stable release: 1.0 in May 2015
+		\item Latest stable release: 1.3
+		\item 46'484 commits on Github
+		\item Largest project written in Rust: Servo
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Features}
+	\begin{itemize}
+		\item Zero-cost abstractions
+		\item Move semantics
+		\item Guaranteed memory safety
+		\item Threads without data races
+		\item Trait based generics
+		\item Pattern matching
+		\item Type inference
+		\item Minimal runtime, no GC
+		\item Efficient C bindings
+	\end{itemize}
+\end{frame}
+
+\section{What is Type Safety?}
+
+\begin{frame}[fragile]{A C Program}
+\begin{minted}{c}
+int main(int argc, char **argv) {
+    unsigned long a[1];
+    a[3] = 0x7ffff7b36cebUL;
+    return 0;
+}
+\end{minted}
+	According to C99, undefined behavior. Output:
+
+	{\footnotesize \tt undef: Error: .netrc file is readable by others.\\
+	undef: Remove password or make file unreadable by others.}
+\end{frame}
+
+\begin{frame}{Definitions}
+	\begin{itemize}
+		\item If a program has been written so that no possible execution can
+			exhibit undefined behavior, we say that program is \textbf{well defined}.
+		\item If a language’s type system ensures that every program is well
+			defined, we say that language is \textbf{type safe}.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Type Safe Languages}
+	\begin{itemize}
+		\item C and C++ are not type safe.
+		\item Python is type safe:
+\begin{minted}[fontsize=\footnotesize]{python}
+>>> a = [0]
+>>> a[3] = 0x7ffff7b36ceb
+Traceback (most recent call last):
+File "", line 1, in <module>
+IndexError: list assignment index out of range
+>>>
+\end{minted}
+		\item Java, JavaScript, Ruby, and Haskell are also type safe.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{It's Ironic.}
+	C and C++ are not type safe.
+
+	Yet they are being used to implement the foundations of a system.
+
+	Rust tries to resolve that tension
+\end{frame}
+
 \end{document}

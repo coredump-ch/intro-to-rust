@@ -1,5 +1,5 @@
 LATEXMK=latexmk
-LATEXMK_ARGS=-pdf -e '$$pdflatex=q/xelatex %O %S/'
+LATEXMK_ARGS=-pdf -e '$$pdflatex=q/xelatex --shell-escape %O %S/'
 
 
 slides.pdf: slides.tex theme
@@ -9,4 +9,7 @@ theme: mtheme
 	cd mtheme && make sty
 	cp mtheme/*.sty .
 
-PHONY: theme
+clean:
+	latexmk -c
+
+PHONY: theme clean

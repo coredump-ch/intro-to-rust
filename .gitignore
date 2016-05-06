@@ -11,3 +11,5 @@
 *.fdb_latexmk
 *.sty
 *.pdf
+*.vrb
+_minted-slides/
