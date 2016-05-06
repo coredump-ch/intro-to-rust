@@ -9,4 +9,7 @@ theme: mtheme
 	cd mtheme && make sty
 	cp mtheme/*.sty .
 
+clean:
+	rm slides.pdf
+
 PHONY: theme
