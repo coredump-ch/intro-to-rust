@@ -1,0 +1,13 @@
+*.swp
+*.log
+*.aux
+*.dvi
+*.log
+*.fls
+*.toc
+*.out
+*.snm
+*.nav
+*.fdb_latexmk
+*.sty
+*.pdf
