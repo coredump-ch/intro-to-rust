@@ -1,4 +1,4 @@
-\documentclass[aspectratio=1610]{beamer}
+\documentclass[aspectratio=1610,t]{beamer}
 
 % Syntax highlighting
 \usepackage{minted}
@@ -13,6 +13,7 @@
 % Customization
 \setbeamertemplate{section in toc}[sections numbered]
 \setbeamerfont{title}{size=\fontsize{30}{30}}
+\setbeamerfont{block title}{size=\large}
 
 % Meta
 \title{Intro To Rust}
@@ -46,7 +47,7 @@
 
 %%%
 
-\begin{frame}{What is Rust?}
+\begin{frame}[c]{What is Rust?}
 	\begin{quote}
 		«Rust is a systems programming language\\
 		that runs blazingly fast, prevents nearly all segfaults,\\
@@ -149,11 +150,11 @@ IndexError: list assignment index out of range
 %%%
 
 \begin{frame}{It's Ironic.}
-	C and C++ are not type safe.
-
-	Yet they are being used to implement the foundations of a system.
-
-	Rust tries to resolve that tension
+	\begin{itemize}
+		\item C and C++ are not type safe.
+		\item Yet they are being used to implement the foundations of a system.
+		\item Rust tries to resolve that tension
+	\end{itemize}
 \end{frame}
 
 % ----------------------------------------------------------------- %
@@ -162,7 +163,7 @@ IndexError: list assignment index out of range
 
 %%%
 
-\begin{frame}[fragile,t]{Example 1}
+\begin{frame}[fragile]{Example 1}
 \begin{alltt}
 \hi{fn gcd}(mut n: u64, mut m: u64) \hi{->} u64 \{
     assert!(n != 0 && m != 0);
@@ -179,7 +180,7 @@ IndexError: list assignment index out of range
 
 %%%
 
-\begin{frame}[fragile,t]{Example 1}
+\begin{frame}[fragile]{Example 1}
 \begin{alltt}
 fn gcd(\hi{mut} n: u64, \hi{mut} m: u64) -> u64 \{
     assert!(n != 0 && m != 0);
@@ -196,7 +197,7 @@ fn gcd(\hi{mut} n: u64, \hi{mut} m: u64) -> u64 \{
 
 %%%
 
-\begin{frame}[fragile,t]{Example 1}
+\begin{frame}[fragile]{Example 1}
 \begin{alltt}
 fn gcd(mut \hi{n: u64}, mut \hi{m: u64}) -> u64 \{
     assert!(n != 0 && m != 0);
@@ -213,7 +214,7 @@ fn gcd(mut \hi{n: u64}, mut \hi{m: u64}) -> u64 \{
 
 %%%
 
-\begin{frame}[fragile,t]{Example 1}
+\begin{frame}[fragile]{Example 1}
 \begin{alltt}
 fn gcd(mut n: u64, mut m: u64) -> u64 \{
     \hi{assert!}(n != 0 && m != 0);
@@ -230,7 +231,7 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
 
 %%%
 
-\begin{frame}[fragile,t]{Example 1}
+\begin{frame}[fragile]{Example 1}
 \begin{alltt}
 fn gcd(mut n: u64, mut m: u64) -> u64 \{
     assert!(n != \hi{0} && m != \hi{0});
@@ -247,7 +248,7 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
 
 %%%
 
-\begin{frame}[fragile,t]{Example 1}
+\begin{frame}[fragile]{Example 1}
 \begin{alltt}
 fn gcd(mut n: u64, mut m: u64) -> u64 \{
     assert!(n != 0 && m != 0);
@@ -264,7 +265,7 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
 
 %%%
 
-\begin{frame}[fragile,t]{Example 1}
+\begin{frame}[fragile]{Example 1}
 \begin{alltt}
 fn gcd(mut n: u64, mut m: u64) -> u64 \{
     assert!(n != 0 && m != 0);
@@ -281,7 +282,7 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
 
 %%%
 
-\begin{frame}[fragile,t]{Example 1}
+\begin{frame}[fragile]{Example 1}
 \begin{alltt}
 fn gcd(mut n: u64, mut m: u64) -> u64 \{
     assert!(n != 0 && m != 0);
@@ -424,6 +425,221 @@ trait FooBar : Foo {
     fn foobar(&self);
 }
 \end{minted}
+\end{frame}
+
+% ----------------------------------------------------------------- %
+
+\section{Memory Safety in Rust}
+
+%%%
+
+\begin{frame}{Three Key Promises}
+
+\begin{itemize}
+	\item No null pointer dereferences
+	\pause
+	\item No dangling pointers
+	\pause
+	\item No buffer overruns
+\end{itemize}
+
+\end{frame}
+
+%%%
+
+\begin{frame}{Promise 1: No null pointer dereferences}
+
+\begin{block}{Null pointers are useful.}
+They can indicate the absence of optional information.\\
+They can indicate failures.\\
+\pause
+But they can introduce severe bugs.
+\end{block}
+\vspace{1em}
+\pause
+\begin{block}{Rust separates the concept of a pointer from the concept of an\\
+		optional or error value.}
+	Optional values are handled by \texttt{Option<T>}.\\
+  Error values are handled by \texttt{Result<T, E>}.\\
+	Many helpful tools to do error handling.
+\end{block}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{You already saw \texttt{Option<T>}}
+\vspace{1em}
+\begin{minted}{rust}
+fn safe_div(n: i32, d: i32) -> Option<i32> {
+    if d == 0 {
+        return None;
+    }
+    Some(n / d)
+}
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{There's also \texttt{Result<T, E>}}
+\vspace{1em}
+\begin{minted}{rust}
+enum Result<T, E> {
+    Ok(T),
+    Err(E)
+}
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{How to use \texttt{Result}s:}
+\vspace{1em}
+\begin{minted}{rust}
+enum Error {
+    DivisionByZero,
+}
+
+fn safe_div(n: i32, d: i32) -> Result<i32, Error> {
+    if d == 0 {
+        return Err(Error::DivisionByZero);
+    }
+    Ok(n / d)
+}
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{But \texttt{Result} can get tedious...}
+\vspace{1em}
+\begin{minted}{rust}
+fn do_calc() -> Result<i32, String> {
+    let a = match do_subcalc1() {
+        Ok(val) => val,
+        Err(msg) => return Err(msg),
+    }
+    let b = match do_subcalc2() {
+        Ok(val) => val,
+        Err(msg) => return Err(msg),
+    }
+    Ok(a + b)
+}
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{Ergonomic error handling with the \texttt{try!} macro}
+\vspace{1em}
+\begin{minted}{rust}
+fn do_calc() -> Result<i32, String> {
+    let a = try!(do_subcalc1());
+    let b = try!(do_subcalc2());
+    Ok(a + b)
+}
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{Mapping Errors}
+\vspace{1em}
+\begin{minted}{rust}
+fn do_subcalc() -> Result<i32, String> { ... }
+fn do_calc() -> Result<i32, Error> {
+    let res = do_subcalc();
+    let mapped = res.map_err(|msg| {
+        println!("Error: {}", msg);
+        Error::CalcFailed
+    });
+    let val = try!(mapped);
+    Ok(val + 1)
+}
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{Mapping Errors: A closer look}
+\vspace{1em}
+\begin{minted}{rust}
+let mapped = res.map_err(|msg| Error::CalcFailed);
+\end{minted}
+...is the same as...
+\begin{minted}{rust}
+let mapped = match res {
+    Ok(val) => Ok(val),
+    Err(msg) => Err(Error::CalcFailed),
+}
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{Other Combinator Methods:}
+\vspace{1em}
+Get the value from an \texttt{Option}.
+\vspace{0.5em}
+\begin{minted}{rust}
+Option.unwrap(self) -> T
+Option.unwrap_or(self, def: T) -> T
+Option.unwrap_or_else<F>(self, f: F) -> T
+    where F: FnOnce() -> T
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{Other Combinator Methods:}
+\vspace{1em}
+Map an \texttt{Option<T>} to \texttt{Option<U>} or \texttt{U}.
+\vspace{0.5em}
+\begin{minted}{rust}
+Option.map<U, F>(self, f: F) -> Option<U>
+    where F: FnOnce(T) -> U
+Option.map_or<U, F>(self, default: U, f: F) -> U
+    where F: FnOnce(T) -> U
+Option.map_or_else<U, D, F>(self, default: D, f: F) -> U
+    where F: FnOnce(T) -> U, D: FnOnce() -> U
+\end{minted}
+\end{block}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
+\begin{block}{Other Combinator Methods:}
+\vspace{1em}
+Convert an \texttt{Option} to a \texttt{Result}, mapping \texttt{Some(v)} to
+\texttt{Ok(v)} and \texttt{None} to \texttt{Err(err)}.
+\vspace{0.5em}
+\begin{minted}{rust}
+Option.ok_or<E>(self, err: E)
+    -> Result<T, E>
+Option.ok_or_else<E, F>(self, err: F)
+    -> Result<T, E>
+    where F: FnOnce() -> E
+\end{minted}
+\end{block}
 \end{frame}
 
 \end{document}
