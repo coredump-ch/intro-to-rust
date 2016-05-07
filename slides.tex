@@ -7,16 +7,38 @@
 \definecolor{mainorange}{HTML}{EC811B}
 \newcommand\hi[1]{{\color{mainorange} \textbf{#1}}}
 
+% Theme
 \usetheme{metropolis}
 
+% Customization
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamerfont{title}{size=\fontsize{30}{30}}
+
+% Meta
 \title{Intro To Rust}
 \date{\today}
-\author{Danilo Bargen, Raphael Nestler}
+\author{Danilo Bargen (@dbrgn), Raphael Nestler (@rnestler)}
 \institute{Coredump Rapperswil}
 
 \begin{document}
 
+{
+\pgfdeclareimage[width=\paperwidth]{bg}{background-dark.pdf}
+\usebackgroundtemplate{\pgfuseimage{bg}}
 \maketitle
+}
+
+% ----------------------------------------------------------------- %
+
+\begin{frame}[noframenumbering]
+	\frametitle{Outline}
+	\tableofcontents
+\end{frame}
+
+% ----------------------------------------------------------------- %
+
+\pgfdeclareimage[width=\paperwidth]{bg}{background-light.pdf}
+\usebackgroundtemplate{\pgfuseimage{bg}}
 
 % ----------------------------------------------------------------- %
 
