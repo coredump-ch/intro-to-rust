@@ -1,19 +1,23 @@
 \documentclass[aspectratio=1610,t]{beamer}
 
+% Colors
+\usepackage{color}
+\definecolor{mainorange}{HTML}{EC811B}
+\definecolor{lightgrey}{HTML}{888888}
+
 % Syntax highlighting
 \usepackage{minted}
 \usepackage{alltt}
-\usepackage{color}
-\definecolor{mainorange}{HTML}{EC811B}
 \newcommand\hi[1]{{\color{mainorange} \textbf{#1}}}
 
 % Theme
-\usetheme{metropolis}
+\usetheme[subsectionpage=progressbar]{metropolis}
 
 % Customization
 \setbeamertemplate{section in toc}[sections numbered]
 \setbeamerfont{title}{size=\fontsize{30}{30}}
 \setbeamerfont{block title}{size=\large}
+\newcommand\sep{\textcolor{lightgrey}{\rule{\linewidth}{0.05mm}}}
 
 % Meta
 \title{Intro To Rust}
@@ -447,6 +451,10 @@ trait FooBar : Foo {
 
 %%%
 
+\subsection{Promise 1: No null pointer dereferences}
+
+%%%
+
 \begin{frame}{Promise 1: No null pointer dereferences}
 
 \begin{block}{Null pointers are useful.}
@@ -468,9 +476,7 @@ But they can introduce severe bugs.
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{You already saw \texttt{Option<T>}}
-\vspace{1em}
+\begin{frame}[fragile]{You already saw \texttt{Option<T>}}
 \begin{minted}{rust}
 fn safe_div(n: i32, d: i32) -> Option<i32> {
     if d == 0 {
@@ -479,28 +485,22 @@ fn safe_div(n: i32, d: i32) -> Option<i32> {
     Some(n / d)
 }
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{There's also \texttt{Result<T, E>}}
-\vspace{1em}
+\begin{frame}[fragile]{There's also \texttt{Result<T, E>}}
 \begin{minted}{rust}
 enum Result<T, E> {
     Ok(T),
     Err(E)
 }
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{How to use \texttt{Result}s:}
-\vspace{1em}
+\begin{frame}[fragile]{How to use \texttt{Result}s:}
 \begin{minted}{rust}
 enum Error {
     DivisionByZero,
@@ -513,14 +513,11 @@ fn safe_div(n: i32, d: i32) -> Result<i32, Error> {
     Ok(n / d)
 }
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{But \texttt{Result} can get tedious...}
-\vspace{1em}
+\begin{frame}[fragile]{But \texttt{Result} can get tedious...}
 \begin{minted}{rust}
 fn do_calc() -> Result<i32, String> {
     let a = match do_subcalc1() {
@@ -534,14 +531,11 @@ fn do_calc() -> Result<i32, String> {
     Ok(a + b)
 }
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{Ergonomic error handling with the \texttt{try!} macro}
-\vspace{1em}
+\begin{frame}[fragile]{Ergonomic error handling with the \texttt{try!} macro}
 \begin{minted}{rust}
 fn do_calc() -> Result<i32, String> {
     let a = try!(do_subcalc1());
@@ -549,14 +543,11 @@ fn do_calc() -> Result<i32, String> {
     Ok(a + b)
 }
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{Mapping Errors}
-\vspace{1em}
+\begin{frame}[fragile]{Mapping Errors}
 \begin{minted}{rust}
 fn do_subcalc() -> Result<i32, String> { ... }
 fn do_calc() -> Result<i32, Error> {
@@ -569,14 +560,11 @@ fn do_calc() -> Result<i32, Error> {
     Ok(val + 1)
 }
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{Mapping Errors: A closer look}
-\vspace{1em}
+\begin{frame}[fragile]{Mapping Errors: A closer look}
 \begin{minted}{rust}
 let mapped = res.map_err(|msg| Error::CalcFailed);
 \end{minted}
@@ -587,32 +575,26 @@ let mapped = match res {
     Err(msg) => Err(Error::CalcFailed),
 }
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{Other Combinator Methods:}
-\vspace{1em}
+\begin{frame}[fragile]{Other Combinator Methods}
 Get the value from an \texttt{Option}.
-\vspace{0.5em}
+\sep
 \begin{minted}{rust}
 Option.unwrap(self) -> T
 Option.unwrap_or(self, def: T) -> T
 Option.unwrap_or_else<F>(self, f: F) -> T
     where F: FnOnce() -> T
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{Other Combinator Methods:}
-\vspace{1em}
+\begin{frame}[fragile]{Other Combinator Methods}
 Map an \texttt{Option<T>} to \texttt{Option<U>} or \texttt{U}.
-\vspace{0.5em}
+\sep
 \begin{minted}{rust}
 Option.map<U, F>(self, f: F) -> Option<U>
     where F: FnOnce(T) -> U
@@ -621,17 +603,15 @@ Option.map_or<U, F>(self, default: U, f: F) -> U
 Option.map_or_else<U, D, F>(self, default: D, f: F) -> U
     where F: FnOnce(T) -> U, D: FnOnce() -> U
 \end{minted}
-\end{block}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Promise 1: No null pointer dereferences}
-\begin{block}{Other Combinator Methods:}
-\vspace{1em}
+\begin{frame}[fragile]{Other Combinator Methods}
+
 Convert an \texttt{Option} to a \texttt{Result}, mapping \texttt{Some(v)} to
-\texttt{Ok(v)} and \texttt{None} to \texttt{Err(err)}.
-\vspace{0.5em}
+\texttt{Ok(v)}\\and \texttt{None} to \texttt{Err(err)}.
+\sep
 \begin{minted}{rust}
 Option.ok_or<E>(self, err: E)
     -> Result<T, E>
@@ -639,7 +619,7 @@ Option.ok_or_else<E, F>(self, err: F)
     -> Result<T, E>
     where F: FnOnce() -> E
 \end{minted}
-\end{block}
 \end{frame}
+
 
 \end{document}
