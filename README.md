@@ -7,7 +7,7 @@ Requirements:
 - XeLaTeX
 - latexmk
 - Fira fonts
-- pygmentize
+- "pygmentize" package
 
 ## Building
 
