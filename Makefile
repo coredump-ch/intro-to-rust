@@ -11,5 +11,6 @@ theme: mtheme
 
 clean:
 	latexmk -c
+	rm -rf _minted-slides/ *.sty *.snm *.vrb *.nav
 
 PHONY: theme clean

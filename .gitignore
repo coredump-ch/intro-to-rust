@@ -13,3 +13,6 @@
 *.pdf
 *.vrb
 _minted-slides/
+*.mintedcmd
+*.mintedmd5
+*.pyg
