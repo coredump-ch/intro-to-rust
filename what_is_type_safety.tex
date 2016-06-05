@@ -1,0 +1,56 @@
+\section{What is Type Safety?}
+
+%%%
+
+\begin{frame}[fragile]{A C Program}
+\begin{minted}{c}
+int main(int argc, char **argv) {
+    unsigned long a[1];
+    a[3] = 0x7ffff7b36cebUL;
+    return 0;
+}
+\end{minted}
+	According to C99, undefined behavior. Output:
+
+	{\footnotesize \tt undef: Error: .netrc file is readable by others.\\
+	undef: Remove password or make file unreadable by others.}
+\end{frame}
+
+%%%
+
+\begin{frame}{Definitions}
+	\begin{itemize}
+		\item If a program has been written so that no possible execution can
+			exhibit undefined behavior, we say that program is \textbf{well defined}.
+		\item If a language’s type system ensures that every program is well
+			defined, we say that language is \textbf{type safe}.
+	\end{itemize}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Type Safe Languages}
+	\begin{itemize}
+		\item C and C++ are not type safe.
+		\item Python is type safe:
+\begin{minted}[fontsize=\footnotesize]{python}
+>>> a = [0]
+>>> a[3] = 0x7ffff7b36ceb
+Traceback (most recent call last):
+File "", line 1, in <module>
+IndexError: list assignment index out of range
+>>>
+\end{minted}
+		\item Java, JavaScript, Ruby, and Haskell are also type safe.
+	\end{itemize}
+\end{frame}
+
+%%%
+
+\begin{frame}{It's Ironic.}
+	\begin{itemize}
+		\item C and C++ are not type safe.
+		\item Yet they are being used to implement the foundations of a system.
+		\item Rust tries to resolve that tension
+	\end{itemize}
+\end{frame}
