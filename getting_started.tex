@@ -1,0 +1,121 @@
+\section{Getting Started}
+
+\subsection{Installing Rust}
+
+\begin{frame}[c]{Rustup.rs}
+\begin{quote}
+«rustup is an installer for \\
+the systems programming language Rust» \\
+\vspace{0.5em}
+{\normalfont \small --- www.rustup.rs}
+\end{quote}
+\end{frame}
+
+\begin{frame}[c]{Rustup.rs}
+\begin{itemize}
+    \item Makes it easy to install different Rust versions
+    \item Successor of multirust
+    \item Written in Rust itself
+\end{itemize}
+\end{frame}
+
+\subsection{Cargo, Rust's Package Manager}
+\begin{frame}[c]{Cargo}
+    \begin{itemize}
+        \item Project and package manager
+        \item Fetches and builds your project’s dependencies
+        \item Invokes rustc or another build tool with the correct parameters
+            to build your project
+    \end{itemize}
+\end{frame}
+\begin{frame}[fragile]{Cargo -- Create a New Project}
+\begin{minted}{sh}
+$ cargo new hello_world --bin
+$ cd hello_world
+$ tree
+.
+├── Cargo.toml
+└── src
+    └── main.rs
+
+1 directory, 2 files
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Cargo -- Compile and Run}
+\begin{minted}{sh}
+$ cargo build
+   Compiling hello_world v0.1.0 (file:///path/to/project/hello_world)
+
+$ ./target/debug/hello_world
+Hello, world!
+
+$ cargo run
+   Compiling hello_world v0.1.0 (file:///path/to/project/hello_world)
+   Running `target/debug/hello_world`
+Hello, world!
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Cargo -- Dependencies}
+\begin{itemize}
+    \item Cargo generated a manifest for us:
+\begin{minted}{ini}
+[package]
+name = "hello_world"
+version = "0.1.0"
+authors = ["Your Name <you@example.com>"]
+\end{minted}
+    \item To add a dependency we add it to the manifest:
+\begin{minted}{ini}
+[dependencies]
+time = "0.1"
+\end{minted}
+    \item Cargo uses semantic versioning\footnote{\url{http://semver.org/}}
+    $\rightarrow$ we get the latest 0.1.x version
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Cargo -- Dependencies}
+\begin{minted}{text}
+$ cargo build
+    Updating registry `https://github.com/rust-lang/crates.io-index`
+ Downloading winapi v0.2.7
+   Compiling winapi v0.2.7
+   Compiling winapi-build v0.1.1
+   Compiling libc v0.2.11
+   Compiling kernel32-sys v0.2.2
+   Compiling time v0.1.35
+   Compiling hello_world v0.1.0 (file:///path/to/project/hello_world)
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile,c]{Cargo -- Testing}
+	Rust has integrated unit testing\footnote{\url{https://doc.rust-lang.org/book/testing.html}}
+
+\begin{minted}{Rust}
+#[test]
+fn it_works() {
+    assert_eq!(1,1);
+}
+
+#[test]
+fn it_fails() {
+    assert_eq!(1,2);
+}
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile,c]{Cargo -- Testing}
+\begin{minted}{text}
+$ cargo test
+
+running 2 tests
+test it_fails ... FAILED
+test it_works ... ok
+
+...
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+\end{minted}
+\end{frame}
