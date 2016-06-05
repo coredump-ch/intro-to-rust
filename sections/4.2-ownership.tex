@@ -1,0 +1,200 @@
+\subsection{Promise 2: No dangling pointers}
+
+%%%
+
+\begin{frame}{Promise 2: No dangling pointers}
+
+\begin{itemize}
+	\item Rust programs never try to access a heap-allocated value after it has
+		been freed.
+	\item By default, no garbage collection or reference counting involved!
+	\item Everything is enforced at compile-time.
+\end{itemize}
+
+\end{frame}
+
+%%%
+
+\begin{frame}{Three Rules}
+
+\begin{block}{Rule 1}
+Every value has a single owner at any given time.
+\end{block}
+\pause
+\begin{block}{Rule 2}
+You can borrow a reference to a value, so long as the
+reference doesn’t outlive the value.
+\end{block}
+\pause
+\begin{block}{Rule 3}
+You can only modify a value when you have exclusive
+access to it.
+\end{block}
+
+\end{frame}
+
+%%%
+
+\begin{frame}{Ownership}
+
+\begin{itemize}
+	\item Variable bindings own their values
+	\item A struct owns its fields
+	\item An enum owns its values
+	\item Every heap-allocated value has a single pointer that owns it
+	\item All values are dropped when their owner is dropped
+\end{itemize}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Ownership: Scoping}
+
+If a value goes out of scope, the corresponding memory is automatically freed.
+
+\begin{minted}{rust}
+{
+    let s = "Chuchichästli".to_string();
+} // s goes out of scope, memory is freed
+\end{minted}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Ownership: Move Semantics}
+
+Ownership is moved by default.
+
+\begin{minted}{rust}
+{
+    let s = "Chuchichästli".to_string();
+
+    // t1 takes ownership from s
+    let t1 = s;
+
+    // compile-time error: use of moved value s
+    let t2 = s;
+}
+\end{minted}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Ownership: Opt-in Implicit Copy Semantics}
+
+Types that implement the \texttt{Copy} marker trait (more about traits later)
+are copied instead of moved. The stdlib implements \texttt{Copy} for all
+primitive types.
+
+\begin{minted}{rust}
+{
+    let pi = 3.1415926f32;
+    let foo = pi;
+    let bar = pi; // This is fine!
+}
+\end{minted}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Ownership: Opt-in Explicit Copy Semantics}
+
+If you prefer copies to be explicit, you can implement the \texttt{Clone} trait
+instead.
+
+\begin{minted}{rust}
+{
+    let s = "Chuchichästli".to_string();
+    let t1 = s.clone();
+    let t2 = s.clone();
+}
+\end{minted}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Ownership: Deriving Copy / Clone}
+
+The compiler can automatically derive implementations of \texttt{Copy} and
+\texttt{Clone} for us.
+
+\begin{minted}{rust}
+#[derive(Copy, Clone)]
+struct Color {
+    r: u8,
+    g: u8,
+    b: u8
+}
+\end{minted}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Ownership: Function Parameters}
+
+But what about this?
+
+\begin{minted}{rust}
+fn print_loud(text: String) { println!("{}!!!!!", text); }
+let s = "Hello, Cosin".to_string();
+print_loud(s);
+println!("{}", s);
+\end{minted}
+
+\pause
+\sep
+
+\begin{minted}[fontsize=\footnotesize]{text}
+error: use of moved value: `s`
+println!(“{}”, s);
+               ^
+note: `s` moved here because it has type `collections::string::String`,
+which is non-copyable
+print_loud(s);
+           ^
+\end{minted}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Borrowing}
+
+Instead of moving a value, it can also be borrowed.
+
+\begin{minted}{rust}
+fn print_loud(text: &String) { println!("{}!!!!!", text); }
+let s = "Hello, Cosin".to_string();
+print_loud(&s);
+println!("Original value was {}", s);
+\end{minted}
+
+Many functions can borrow at the same time, because they cannot modify.
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Mutable Borrowing}
+
+If you need exclusive (=write) access, you can use mutable borrows.
+
+\begin{minted}{rust}
+fn make_loud(text: &mut String) { text.push_str("!!!!!"); };
+let mut s = "Hello, Cosin".to_string();
+make_loud(&mut s);
+println!("New value is {}", s);
+\end{minted}
+
+While borrow a mutable reference to a value, that refrence is the only way to
+access that value at all.
+
+\end{frame}
+
+%%%
