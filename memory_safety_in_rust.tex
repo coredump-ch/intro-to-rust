@@ -4,12 +4,33 @@
 
 \begin{frame}{Three Key Promises}
 
+To guarantee memory safety, Rust gives us three key promises:
+
 \begin{itemize}
 	\item No null pointer dereferences
+		\pause
+		\begin{itemize}
+			\item There are no null pointers in safe Rust
+			\item For error handling and control flow, \texttt{Option} and
+				\texttt{Result} types are used.
+		\end{itemize}
 	\pause
 	\item No dangling pointers
+		\pause
+		\begin{itemize}
+			\item The concepts of "ownership", "borrowing" and "lifetimes" prevent the
+				use of uninitialized or freed pointers
+		\end{itemize}
 	\pause
 	\item No buffer overruns
+		\pause
+		\begin{itemize}
+			\item There's no pointer arithmetic in safe Rust
+			\item Arrays in Rust are not just pointers
+			\item There are runtime bounds checks for indexing
+			\item But most stdlib functions use iterators, which are checked at
+				compile time
+		\end{itemize}
 \end{itemize}
 
 \end{frame}
