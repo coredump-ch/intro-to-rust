@@ -1,0 +1,11 @@
+
+What is Rust -> Danilo
+Getting Started -> Raphi
+What is Type Safety -> Danilo
+Reading Rust -> Raphi
+Memory Safety I -> Danilo
+Memory Safety II/III -> Raphi
+Multi-Threading -> Danilo
+Community -> Raphi
+Schluss
+
