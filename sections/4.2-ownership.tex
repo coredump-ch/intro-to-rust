@@ -68,15 +68,13 @@ If a value goes out of scope, the corresponding memory is automatically freed.
 Ownership is moved by default.
 
 \begin{minted}{rust}
-{
-    let s = "Chuchichästli".to_string();
+let s = "Chuchichästli".to_string();
 
-    // t1 takes ownership from s
-    let t1 = s;
+// t1 takes ownership from s
+let t1 = s;
 
-    // compile-time error: use of moved value s
-    let t2 = s;
-}
+// compile-time error: use of moved value s
+let t2 = s;
 \end{minted}
 
 \end{frame}
@@ -90,11 +88,9 @@ are copied instead of moved. The stdlib implements \texttt{Copy} for all
 primitive types.
 
 \begin{minted}{rust}
-{
-    let pi = 3.1415926f32;
-    let foo = pi;
-    let bar = pi; // This is fine!
-}
+let pi = 3.1415926f32;
+let foo = pi;
+let bar = pi; // This is fine!
 \end{minted}
 
 \end{frame}
@@ -107,11 +103,9 @@ If you prefer copies to be explicit, you can implement the \texttt{Clone} trait
 instead.
 
 \begin{minted}{rust}
-{
-    let s = "Chuchichästli".to_string();
-    let t1 = s.clone();
-    let t2 = s.clone();
-}
+let s = "Chuchichästli".to_string();
+let t1 = s.clone();
+let t2 = s.clone();
 \end{minted}
 
 \end{frame}
@@ -194,7 +188,81 @@ println!("New value is {}", s);
 
 While borrow a mutable reference to a value, that refrence is the only way to
 access that value at all.
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Borrowing prevents moving}
+
+While borrowed, a move must be prevented. Otherwise you might end up with a
+dangling pointer.
+
+\begin{minted}{rust}
+let x = String::new();
+let borrow = &x;
+let y = x;
+\end{minted}
+
+\sep
+
+\begin{minted}[fontsize=\footnotesize]{text}
+error: cannot move out of `x` because it is borrowed [E0505]
+    let y = x;
+            ^
+note: borrow of `x` occurs here
+    let borrow = &x;
+                  ^
+\end{minted}
 
 \end{frame}
 
 %%%
+
+\begin{frame}[fragile]{Lifetimes}
+
+What's the problem here?
+
+\begin{minted}{rust}
+let borrow;
+let x = String::new();
+borrow = &x;
+\end{minted}
+
+\sep
+
+\begin{minted}[fontsize=\footnotesize]{text}
+error: `x` does not live long enough
+    borrow = &x;
+              ^
+\end{minted}
+
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Lifetimes}
+
+The lifetime of the borrow is longer than the lifetime of `x`.
+
+\begin{minted}[fontsize=\footnotesize]{rust}
+let borrow;
+let x = String::new();
+borrow = &x;
+\end{minted}
+
+This can also be visualized differently:
+
+\begin{minted}[fontsize=\footnotesize]{rust}
+{
+    let borrow;
+    {
+        let x = String::new();
+        borrow = &x;
+    }
+}
+\end{minted}
+
+Using lifetime checking, the compiler guarantees that there are no dangling
+pointers.
+
+\end{frame}
