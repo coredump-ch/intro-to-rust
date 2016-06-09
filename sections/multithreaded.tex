@@ -1,0 +1,166 @@
+\section{Multithreaded Programming}
+
+\begin{frame}{We'll make this short}
+\begin{itemize}
+  \item The Rust compiler does not know about concurrency
+  \item Everything works based on the three rules\footnote{Slide~\ref{threerules}}
+  \item We'll step through an example
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Threads}
+\begin{minted}{rust}
+let t1 = std::thread::spawn(|| { return 23; });
+let t2 = std::thread::spawn(|| { return 19; });
+
+let v1 = t1.join().unwrap();
+let v2 = t2.join().unwrap();
+
+println!("{} + {} = {}", v1, v2, v1 + v2);
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Shared Data}
+\begin{minted}{rust}
+let mut data = vec![0];
+let t1 = thread::spawn(|| { data.push(19); });
+\end{minted}
+\sep
+\begin{minted}[fontsize=\footnotesize]{text}
+error: closure may outlive the current function, but it borrows `data`,
+which is owned by the current function [E0373]
+    let t1 = thread::spawn(|| {
+        data.push(19);
+    });
+note: `data` is borrowed here
+    data.push(19);
+    ^~~~
+help: to force the closure to take ownership of `data` (and any other
+referenced variables), use the `move` keyword, as shown:
+     let t1 = thread::spawn(move || {
+         data.push(19);
+     });
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Shared Data (2) -- Move data}
+Let's move the \texttt{data} into the Thread.
+\begin{minted}{rust}
+let mut data = vec![0];
+let t1 = thread::spawn(move || { data.push(19); });
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Shared Data (3) -- Outside Access}
+But now we can't access it anymore..
+\begin{minted}{rust}
+let mut data = vec![0];
+let t1 = thread::spawn(move || { data.push(19); });
+t1.join().unwrap();
+println!("Data: {:?}", data);
+\end{minted}
+\sep
+\begin{minted}[fontsize=\footnotesize]{text}
+error: use of moved value: `data` [E0382]
+    println!("Data: {:?}", data);
+                           ^~~~
+note: `data` moved into closure environment here because it has
+type `collections::vec::Vec<i32>`, which is non-copyable
+    let t1 = thread::spawn(move || { data.push(19); });
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+help: perhaps you meant to use `clone()`?
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Shared Data (4) -- Arcs}
+Atomic reference counting to the rescue!
+\begin{minted}{rust}
+let data = Arc::new(vec![0]);
+
+let data2 = data.clone();
+let t1 = thread::spawn(move || {
+    println!("Data2: {:?}", data2);
+});
+
+t1.join().unwrap();
+println!("Data: {:?}", data);
+\end{minted}
+\sep
+\begin{minted}[fontsize=\footnotesize]{text}
+Data2: [0]
+Data: [0]
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Shared Data (5) -- Mutate?}
+\begin{minted}{rust}
+let data = Arc::new(vec![0]);
+
+let mut data2 = data.clone();
+let t1 = thread::spawn(move || {
+    data2.push(1);
+});
+
+t1.join().unwrap();
+println!("Data: {:?}", data);
+\end{minted}
+\sep
+\begin{minted}[fontsize=\footnotesize]{text}
+error: cannot borrow immutable borrowed content as mutable
+    data2.push(1);
+    ^~~~~
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Shared Data (6) -- Arc + Mutex}
+\begin{minted}{rust}
+let data = Arc::new(Mutex::new(vec![0]));
+
+let data2 = data.clone();
+let t1 = thread::spawn(move || {
+    let mut guard = data2.lock().unwrap();
+    guard.push(1);
+});
+
+t1.join().unwrap();
+println!("Data: {:?}", *data.lock().unwrap());
+\end{minted}
+\sep
+\begin{minted}[fontsize=\footnotesize]{text}
+Data: [0, 1]
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Shared Data (7) -- Multiple Threads}
+Now we can also create multiple threads.
+\begin{minted}[fontsize=\footnotesize]{rust}
+...
+let data2 = data.clone();
+let t1 = thread::spawn(move || {
+    let mut guard = data2.lock().unwrap();
+    guard.push(1);
+});
+
+let data3 = data.clone();
+let t2 = thread::spawn(move || {
+    let mut guard = data3.lock().unwrap();
+    guard.push(2);
+});
+...
+\end{minted}
+\sep
+\begin{minted}[fontsize=\footnotesize]{text}
+Data: [0, 1, 2]
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Channels}
+Besides threading, you can also use channels:
+\begin{minted}{rust}
+use std::sync::mpsc::channel;
+\end{minted}
+Signature:
+\begin{minted}{rust}
+fn channel<T>() -> (Sender<T>, Receiver<T>)
+\end{minted}
+\end{frame}
