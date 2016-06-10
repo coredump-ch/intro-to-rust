@@ -39,13 +39,4 @@ To guarantee memory safety, Rust gives us three key promises:
 
 \input{sections/4.1-error-handling}
 \input{sections/4.2-ownership}
-
-\begin{frame}
-\begin{itemize}
-	\item There's no pointer arithmetic in safe Rust
-	\item Arrays in Rust are not just pointers
-	\item There are runtime bounds checks for indexing
-	\item But most stdlib functions use iterators, which are checked at
-		compile time
-\end{itemize}
-\end{frame}
+\input{sections/4.3-bufferoverruns}

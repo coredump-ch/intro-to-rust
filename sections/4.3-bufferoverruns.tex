@@ -1,0 +1,11 @@
+\subsection{Promise 3: No buffer overruns}
+
+\begin{frame}{No buffer overruns: Recap}
+\begin{itemize}
+	\item There's no pointer arithmetic in safe Rust
+	\item Arrays in Rust are not just pointers
+	\item There are runtime bounds checks for indexing
+	\item But most stdlib functions use iterators, which are checked at
+		compile time
+\end{itemize}
+\end{frame}
