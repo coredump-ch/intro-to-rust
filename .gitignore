@@ -16,3 +16,4 @@ _minted-slides/
 *.mintedcmd
 *.mintedmd5
 *.pyg
+examples/*/target
