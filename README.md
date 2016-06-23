@@ -9,6 +9,11 @@ Requirements:
 - Fira fonts
 - pygmentize
 
+To install the dependencies under Ubuntu 16.04:
+```
+sudo apt install texlive-xetex texlive-fonts-extra python-pygments
+```
+
 ## Building
 
 First, install Fira Sans and Fira Mono fonts on your system:
