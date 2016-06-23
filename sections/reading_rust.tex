@@ -176,6 +176,33 @@ assert_eq!(p.distance_from_zero(), 5.0);
 \end{minted}
 \end{frame}
 
+\begin{frame}[fragile]{Enumerations}
+\begin{columns}[t,onlytextwidth]
+\column{.35\textwidth}
+\begin{minted}{rust}
+pub enum Color {
+  Red,
+  Green,
+  Blue,
+}
+\end{minted}
+\column{.65\textwidth}
+\begin{minted}{rust}
+let color = Color::Red;
+match color {
+  Color::Red => println!("Got red"),
+  Color::Green => println!("Got green"),
+  Color::Blue => println!("Got blue"),
+}
+\end{minted}
+\end{columns}
+  \begin{itemize}
+    \item<1-> In its simplest form similar to C/C++ (but type safe)
+    \item<2> We can match (switch) on enums
+    \item<2> We \emph{must} match all variants
+  \end{itemize}
+\end{frame}
+
 \begin{frame}[fragile]{Example 2: Generics}
 
 \begin{minted}{rust}
@@ -216,7 +243,7 @@ Range { start: 1.3, end: 4.7 }  // Also OK
 
 %%%
 
-\begin{frame}[fragile]{Example 4: Enumerations}
+\begin{frame}[fragile]{Example 4: Generic Enumerations}
 \begin{minted}{rust}
 enum Option<T> {
     Some(T),
