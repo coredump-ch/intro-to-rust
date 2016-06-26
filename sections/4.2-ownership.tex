@@ -136,7 +136,7 @@ But what about this?
 
 \begin{minted}{rust}
 fn print_loud(text: String) { println!("{}!!!!!", text); }
-let s = "Hello, Cosin".to_string();
+let s = "Hello, Mozilla".to_string();
 print_loud(s);
 println!("{}", s);
 \end{minted}
@@ -164,7 +164,7 @@ Instead of moving a value, it can also be borrowed.
 
 \begin{minted}{rust}
 fn print_loud(text: &String) { println!("{}!!!!!", text); }
-let s = "Hello, Cosin".to_string();
+let s = "Hello, Mozilla".to_string();
 print_loud(&s);
 println!("Original value was {}", s);
 \end{minted}
@@ -181,7 +181,7 @@ If you need exclusive (=write) access, you can use mutable borrows.
 
 \begin{minted}{rust}
 fn make_loud(text: &mut String) { text.push_str("!!!!!"); };
-let mut s = "Hello, Cosin".to_string();
+let mut s = "Hello, Mozilla".to_string();
 make_loud(&mut s);
 println!("New value is {}", s);
 \end{minted}
