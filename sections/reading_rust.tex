@@ -150,7 +150,7 @@ pub struct Point {
 impl Point {
   /// static method ("constructor" per convention)
   pub fn new() -> Point {
-    Point{x:0.0, y:0.0}
+    Point { x: 0.0, y: 0.0 }
   }
   pub fn distance_from_zero(&self) -> f64 {
     (self.x*self.x + self.y*self.y).sqrt()
