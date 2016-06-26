@@ -316,17 +316,3 @@ trait Validatable {
 }
 \end{minted}
 \end{frame}
-
-%%%
-
-\begin{frame}[fragile]{Trait Composition}
-\begin{minted}{rust}
-trait Foo {
-    fn foo(&self);
-}
-
-trait FooBar : Foo {
-    fn foobar(&self);
-}
-\end{minted}
-\end{frame}
