@@ -159,7 +159,7 @@ impl Point {
 \end{minted}
 \end{frame}
 
-\begin{frame}[fragile]{Structs II}
+\begin{frame}[fragile]{Structs: Usage}
 \begin{minted}{rust}
 let p = Point::new();
 assert_eq!(p.x, 0.0);
@@ -207,7 +207,7 @@ match color {
 
 \begin{minted}{rust}
 fn min<T: Ord>(a: T, b: T) -> T {
-    if a <= b { a } else { b }
+  if a <= b { a } else { b }
 }
 \end{minted}
 \pause
@@ -228,8 +228,8 @@ min(10i32, "xyz"); // error: mismatched types
 \begin{frame}[fragile]{Generic Types}
 \begin{minted}{rust}
 struct Range<Idx> {
-    start: Idx,
-    end: Idx,
+  start: Idx,
+  end: Idx,
 }
 \end{minted}
 \pause
@@ -246,8 +246,8 @@ Range { start: 1.3, end: 4.7 }  // Also OK
 \begin{frame}[fragile]{ Generic Enumerations}
 \begin{minted}{rust}
 enum Option<T> {
-    Some(T),
-    None
+  Some(T),
+  None
 }
 \end{minted}
 \end{frame}
@@ -257,10 +257,10 @@ enum Option<T> {
 \begin{frame}[fragile]{Application of Option<T>}
 \begin{minted}{rust}
 fn safe_div(n: i32, d: i32) -> Option<i32> {
-    if d == 0 {
-        return None;
-    }
-    Some(n / d)
+  if d == 0 {
+    return None;
+  }
+  Some(n / d)
 }
 \end{minted}
 \end{frame}
@@ -270,8 +270,8 @@ fn safe_div(n: i32, d: i32) -> Option<i32> {
 \begin{frame}[fragile]{Matching an Option}
 \begin{minted}{rust}
 match safe_div(num, denom) {
-    None => println!("No quotient."),
-    Some(v) => println!("Quotient is {}.", v)
+  None => println!("No quotient."),
+  Some(v) => println!("Quotient is {}.", v)
 }
 \end{minted}
 \end{frame}
@@ -281,7 +281,7 @@ match safe_div(num, denom) {
 \begin{frame}[fragile]{Traits}
 \begin{minted}{rust}
 trait HasArea {
-    fn area(&self) -> f64;
+  fn area(&self) -> f64;
 }
 \end{minted}
 \end{frame}
@@ -291,15 +291,15 @@ trait HasArea {
 \begin{frame}[fragile]{Trait Implementation}
 \begin{minted}{rust}
 struct Circle {
-    x: f64,
-    y: f64,
-    radius: f64,
+  x: f64,
+  y: f64,
+  radius: f64,
 }
 
 impl HasArea for Circle {
-    fn area(&self) -> f64 {
-       consts::PI * (self.radius * self.radius)
-    }
+  fn area(&self) -> f64 {
+    consts::PI * (self.radius * self.radius)
+  }
 }
 \end{minted}
 \end{frame}
@@ -309,10 +309,10 @@ impl HasArea for Circle {
 \begin{frame}[fragile]{Default Methods}
 \begin{minted}{rust}
 trait Validatable {
-    fn is_valid(&self) -> bool;
-    fn is_invalid(&self) -> bool {
-        !self.is_valid()
-    }
+  fn is_valid(&self) -> bool;
+  fn is_invalid(&self) -> bool {
+    !self.is_valid()
+  }
 }
 \end{minted}
 \end{frame}
