@@ -327,13 +327,3 @@ match safe_div(num, denom) {
 
 %%%
 
-\begin{frame}[fragile]{Default Methods}
-\begin{minted}{rust}
-trait Validatable {
-  fn is_valid(&self) -> bool;
-  fn is_invalid(&self) -> bool {
-    !self.is_valid()
-  }
-}
-\end{minted}
-\end{frame}
