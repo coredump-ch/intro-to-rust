@@ -203,7 +203,41 @@ match color {
   \end{itemize}
 \end{frame}
 
-\begin{frame}[fragile]{Generics}
+%%%
+
+\begin{frame}[fragile]{Traits}
+\begin{minted}{rust}
+trait HasArea {
+  fn area(&self) -> f64;
+}
+\end{minted}
+\begin{itemize}
+	\item Like interfaces
+	\item Defines functionality a type must provide
+\end{itemize}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Trait Implementation}
+\begin{minted}{rust}
+struct Circle {
+  x: f64,
+  y: f64,
+  radius: f64,
+}
+
+impl HasArea for Circle {
+  fn area(&self) -> f64 {
+    consts::PI * (self.radius * self.radius)
+  }
+}
+\end{minted}
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Trait Based Generics}
 
 \begin{minted}{rust}
 fn min<T: Ord>(a: T, b: T) -> T {
@@ -272,34 +306,6 @@ fn safe_div(n: i32, d: i32) -> Option<i32> {
 match safe_div(num, denom) {
   None => println!("No quotient."),
   Some(v) => println!("Quotient is {}.", v)
-}
-\end{minted}
-\end{frame}
-
-%%%
-
-\begin{frame}[fragile]{Traits}
-\begin{minted}{rust}
-trait HasArea {
-  fn area(&self) -> f64;
-}
-\end{minted}
-\end{frame}
-
-%%%
-
-\begin{frame}[fragile]{Trait Implementation}
-\begin{minted}{rust}
-struct Circle {
-  x: f64,
-  y: f64,
-  radius: f64,
-}
-
-impl HasArea for Circle {
-  fn area(&self) -> f64 {
-    consts::PI * (self.radius * self.radius)
-  }
 }
 \end{minted}
 \end{frame}
