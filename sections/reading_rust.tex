@@ -198,10 +198,25 @@ match color {
 \end{columns}
   \begin{itemize}
     \item<1-> In its simplest form similar to C/C++ (but type safe)
+	\item<1-> Data that is one of several possible variants
     \item<2> We can match (switch) on enums
     \item<2> We \emph{must} match all variants
   \end{itemize}
 \end{frame}
+
+\begin{frame}[fragile]{Enums with data}
+\begin{minted}{rust}
+pub enum Shape {
+  Circle{radius: f64},
+  Rectangle{width: f64, height: f64},
+}
+\end{minted}
+\begin{itemize}
+	\item A \texttt{Shape} is Either a \texttt{Circle} with \texttt{radius} or
+		a \texttt{Rectangle} with \texttt{width} and \texttt{height}
+\end{itemize}
+\end{frame}
+
 
 %%%
 
