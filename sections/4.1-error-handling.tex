@@ -32,6 +32,8 @@ fn safe_div(n: i32, d: i32) -> Option<i32> {
     Some(n / d)
 }
 \end{minted}
+\pause
+But what if you want to return an error, not just \texttt{None}?
 \end{frame}
 
 %%%
@@ -60,6 +62,8 @@ fn safe_div(n: i32, d: i32) -> Result<i32, Error> {
     Ok(n / d)
 }
 \end{minted}
+\pause
+It's good practice to define your own error types instead of using strings.
 \end{frame}
 
 %%%
@@ -90,11 +94,16 @@ fn do_calc() -> Result<i32, String> {
     Ok(a + b)
 }
 \end{minted}
+\pause
+Note: Error signature must match!
 \end{frame}
 
 %%%
 
 \begin{frame}[fragile]{Mapping Errors}
+What if the signature does not match?
+\pause
+Then we can use map\_err():
 \begin{minted}{rust}
 fn do_subcalc() -> Result<i32, String> { ... }
 fn do_calc() -> Result<i32, Error> {
