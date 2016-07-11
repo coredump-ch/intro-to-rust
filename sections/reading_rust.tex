@@ -205,15 +205,29 @@ match color {
 \end{frame}
 
 \begin{frame}[fragile]{Enums with data}
+\begin{columns}[t,onlytextwidth]
+\column{.37\textwidth}
 \begin{minted}{rust}
 pub enum Shape {
   Circle{radius: f64},
-  Rectangle{width: f64, height: f64},
+  Square{side: f64},
 }
 \end{minted}
+\column{.63\textwidth}
+\pause\begin{minted}{rust}
+let shape = Shape::Circle{radius: 1.0};
+match shape {
+  Shape::Circle{radius} => {
+    println!("Circle with radius {}", radius)
+  }
+  _ => panic!("Must be a circle!"),
+}
+\end{minted}
+\end{columns}
 \begin{itemize}
-	\item A \texttt{Shape} is Either a \texttt{Circle} with \texttt{radius} or
-		a \texttt{Rectangle} with \texttt{width} and \texttt{height}
+  \item<1-> A \texttt{Shape} is Either a \texttt{Circle} with \texttt{radius} or a
+    \texttt{Square} with \texttt{side}
+  \item<2-> We can use match to "extract" data
 \end{itemize}
 \end{frame}
 
