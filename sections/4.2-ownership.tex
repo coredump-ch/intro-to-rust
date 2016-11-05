@@ -55,7 +55,7 @@ If a value goes out of scope, the corresponding memory is automatically freed.
 
 \begin{minted}{rust}
 {
-    let s = "Chuchichästli".to_string();
+    let s: String = "Chuchichästli".to_string();
 } // s goes out of scope, memory is freed
 \end{minted}
 
@@ -68,7 +68,7 @@ If a value goes out of scope, the corresponding memory is automatically freed.
 Ownership is moved by default.
 
 \begin{minted}{rust}
-let s = "Chuchichästli".to_string();
+let s: String = "Chuchichästli".to_string();
 
 // t1 takes ownership from s
 let t1 = s;
