@@ -290,17 +290,17 @@ min(10i32, "xyz"); // error: mismatched types
 
 \begin{frame}[fragile]{Generic Types}
 \begin{minted}{rust}
-struct Range<Idx> {
-  start: Idx,
-  end: Idx,
+struct Coords<T> {
+  x: T,
+  y: T,
 }
 \end{minted}
 \pause
 \begin{minted}{rust}
 ...
 
-Range { start: 200, end: 800 }  // OK
-Range { start: 1.3, end: 4.7 }  // Also OK
+Coords { x: 200, y: 800 }  // OK
+Coords { x: 1.3, y: 4.7 }  // Also OK
 \end{minted}
 \end{frame}
 
