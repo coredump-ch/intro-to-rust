@@ -264,24 +264,37 @@ impl HasArea for Circle {
 \end{minted}
 \end{frame}
 
+\begin{frame}[fragile]{Trait Implementation}
+\begin{minted}{rust}
+struct Square {
+  x: f64,
+  y: f64,
+  side: f64,
+}
+
+impl HasArea for Square {
+  fn area(&self) -> f64 {
+    self.side * self.side
+  }
+}
+\end{minted}
+\end{frame}
+
 %%%
 
 \begin{frame}[fragile]{Trait Based Generics}
 
 \begin{minted}{rust}
-fn min<T: Ord>(a: T, b: T) -> T {
-  if a <= b { a } else { b }
+fn print_area<Shape: HasArea>(shape: &Shape) {
+  println!("{}", shape.area());
 }
 \end{minted}
 \pause
 \begin{minted}{rust}
 ...
 
-min(10i8,  20)    == 10;    // T is i8
-min(10,    20u32) == 10;    // T is u32
-min("abc", "xyz") == "abc"; // Strings are Ord
-
-min(10i32, "xyz"); // error: mismatched types
+print_area(Circle{x: 1.0, y: 2.0, radius: 3.0}); // Shape is Circle
+print_area(Square{x: 4.0, y: 5.0, side: 5.0}); // Shape is Square
 \end{minted}
 
 \end{frame}
