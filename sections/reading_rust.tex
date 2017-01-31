@@ -236,7 +236,7 @@ match shape {
 
 \begin{frame}[fragile]{Traits}
 \begin{minted}{rust}
-trait HasArea {
+pub trait HasArea {
   fn area(&self) -> f64;
 }
 \end{minted}
@@ -250,7 +250,7 @@ trait HasArea {
 
 \begin{frame}[fragile]{Trait Implementation}
 \begin{minted}{rust}
-struct Circle {
+pub struct Circle {
   x: f64,
   y: f64,
   radius: f64,
@@ -258,7 +258,7 @@ struct Circle {
 
 impl HasArea for Circle {
   fn area(&self) -> f64 {
-    consts::PI * (self.radius * self.radius)
+    std::f64::consts::PI * (self.radius * self.radius)
   }
 }
 \end{minted}
@@ -266,7 +266,7 @@ impl HasArea for Circle {
 
 \begin{frame}[fragile]{Trait Implementation}
 \begin{minted}{rust}
-struct Square {
+pub struct Square {
   x: f64,
   y: f64,
   side: f64,
@@ -285,7 +285,7 @@ impl HasArea for Square {
 \begin{frame}[fragile]{Trait Based Generics}
 
 \begin{minted}{rust}
-fn print_area<Shape: HasArea>(shape: &Shape) {
+pub fn print_area<Shape: HasArea>(shape: &Shape) {
   println!("{}", shape.area());
 }
 \end{minted}
@@ -293,8 +293,8 @@ fn print_area<Shape: HasArea>(shape: &Shape) {
 \begin{minted}{rust}
 ...
 
-print_area(Circle{x: 1.0, y: 2.0, radius: 3.0}); // Shape is Circle
-print_area(Square{x: 4.0, y: 5.0, side: 5.0}); // Shape is Square
+print_area(&Circle{x: 1.0, y: 2.0, radius: 3.0}); // Shape is Circle
+print_area(&Square{x: 4.0, y: 5.0, side: 5.0}); // Shape is Square
 \end{minted}
 
 \end{frame}
