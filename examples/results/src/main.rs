@@ -1,8 +1,10 @@
 fn main() {
-    println!("Hello, {:?}!", do_calc());
+    println!("match     {:?}!", do_calc_match());
+    println!("try       {:?}!", do_calc_try());
+    println!("operator? {:?}!", do_calc_operator());
 }
 
-fn do_calc() -> Result<i32, String> {
+fn do_calc_match() -> Result<i32, String> {
     let a = match do_subcalc1() {
         Ok(val) => val,
         Err(msg) => return Err(msg),
@@ -11,6 +13,18 @@ fn do_calc() -> Result<i32, String> {
         Ok(val) => val,
         Err(msg) => return Err(msg),
     };
+    Ok(a + b)
+}
+
+fn do_calc_try() -> Result<i32, String> {
+    let a = try!( do_subcalc1() );
+    let b = try!( do_subcalc2() );
+    Ok(a + b)
+}
+
+fn do_calc_operator() -> Result<i32, String> {
+    let a = do_subcalc1()?;
+    let b = do_subcalc2()?;
     Ok(a + b)
 }
 
