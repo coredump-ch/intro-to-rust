@@ -8,7 +8,6 @@ To guarantee memory safety, Rust gives us three key promises:
 
 \begin{itemize}
 	\item No null pointer dereferences
-		\pause
 		\begin{itemize}
 			\item There are no null pointers in safe Rust
 			\item For error handling and control flow, \texttt{Option} and
@@ -16,14 +15,12 @@ To guarantee memory safety, Rust gives us three key promises:
 		\end{itemize}
 	\pause
 	\item No dangling pointers
-		\pause
 		\begin{itemize}
 			\item The concepts of "ownership", "borrowing" and "lifetimes" prevent the
 				use of uninitialized or freed pointers
 		\end{itemize}
 	\pause
 	\item No buffer overruns
-		\pause
 		\begin{itemize}
 		\item There's no pointer arithmetic in safe Rust
 		\item Arrays in Rust are not just pointers
@@ -32,6 +29,29 @@ To guarantee memory safety, Rust gives us three key promises:
 			compile time
 		\end{itemize}
 \end{itemize}
+
+\end{frame}
+
+
+%%%
+
+\begin{frame}[fragile]{Ergonomic scaffolding with \texttt{unwrap()}}
+Explicit error handling may seem like a huge barrier.
+
+Extracting values from \texttt{Option<T>}, \texttt{Result<T, E>} and may others fast with \texttt{unwrap()} and abort the program on failure:
+
+\begin{minted}{rust}
+fn main() {
+    // Assuming `Cargo.toml` will allways be here
+    // TODO: handle error late in development
+    let buffer = some_io_function("Cargo.toml").unwrap();
+    // ...
+}
+
+fn some_io_function(path: String) -> io::Result<String> {
+    // This may fail
+}
+\end{minted}
 
 \end{frame}
 
