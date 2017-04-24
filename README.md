@@ -7,7 +7,7 @@ Requirements:
 - XeLaTeX
 - latexmk
 - Fira fonts
-- pygmentize
+- "pygmentize" package
 
 To install the dependencies under Ubuntu 16.04:
 ```
