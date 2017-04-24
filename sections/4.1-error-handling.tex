@@ -94,7 +94,19 @@ fn do_calc() -> Result<i32, String> {
     Ok(a + b)
 }
 \end{minted}
-\pause
+Note: Error signature must match!
+\end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Ergonomic error handling with the \texttt{?} operator}
+\begin{minted}{rust}
+fn do_calc() -> Result<i32, String> {
+    let a = do_subcalc1()?;
+    let b = do_subcalc2()?;
+    Ok(a + b)
+}
+\end{minted}
 Note: Error signature must match!
 \end{frame}
 
@@ -102,7 +114,7 @@ Note: Error signature must match!
 
 \begin{frame}[fragile]{Mapping Errors}
 What if the signature does not match?
-\pause
+
 Then we can use map\_err():
 \begin{minted}{rust}
 fn do_subcalc() -> Result<i32, String> { ... }
@@ -112,8 +124,7 @@ fn do_calc() -> Result<i32, Error> {
         println!("Error: {}", msg);
         Error::CalcFailed
     });
-    let val = try!(mapped);
-    Ok(val + 1)
+    Ok(mapped? + 1)
 }
 \end{minted}
 \end{frame}
