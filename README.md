@@ -8,10 +8,11 @@ Requirements:
 - latexmk
 - Fira fonts
 - pygmentize
+- metropolis theme (part of TeXlive 2016+)
 
-To install the dependencies under Ubuntu 16.04:
+To install the dependencies under Ubuntu 18.04:
 ```
-sudo apt install texlive-xetex texlive-fonts-extra python-pygments
+sudo apt install texlive-xetex texlive-fonts-extra texlive-latex-extra python-pygments
 ```
 
 ## Building
@@ -23,7 +24,8 @@ First, install Fira Sans and Fira Mono fonts on your system:
 
 Then build the slides:
 
-    git clone --recursive https://github.com/coredump-ch/intro-to-rust
+    git clone https://github.com/coredump-ch/intro-to-rust
+    cd intro-to-rust
     make
 
 ## [License](LICENSE)
