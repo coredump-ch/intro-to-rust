@@ -2,7 +2,7 @@ LATEXMK=latexmk
 LATEXMK_ARGS=-pdf -e '$$pdflatex=q/xelatex --shell-escape %O %S/'
 
 
-slides.pdf: slides.tex
+slides.pdf: slides.tex sections/*.tex
 	${LATEXMK} ${LATEXMK_ARGS} slides.tex
 
 clean:
