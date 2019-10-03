@@ -10,7 +10,7 @@
 *.nav
 *.fdb_latexmk
 *.sty
-*.pdf
+slides.pdf
 *.vrb
 _minted-slides/
 *.mintedcmd
