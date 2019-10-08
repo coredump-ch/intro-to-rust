@@ -2,31 +2,25 @@
 
 \subsection{Installing Rust}
 
-\begin{frame}[c]{Rustup.rs}
-\begin{quote}
-«rustup is an installer for \\
-the systems programming language Rust» \\
-\vspace{0.5em}
-{\normalfont \small --- www.rustup.rs}
-\end{quote}
-\end{frame}
+\begin{frame}[fragile]{Rustup}
+	The best way to install and update the Rust toolchain is rustup
+	(\url{https://rustup.rs/}).
 
-\begin{frame}[fragile]{Rustup.rs}
-\begin{itemize}
-    \item Official installation method by now
-    \item Makes it easy to:
-      \begin{itemize}
-        \item Install different Rust versions
-        \item Install cross compilation toolchains
-      \end{itemize}
-    \item Written in Rust itself
-    \pause\item Installing is easy:
+	It makes it easy to:
+
+	\begin{itemize}
+		\item Install different Rust versions
+		\item Install cross compilation toolchains
+	\end{itemize}
+
+	\vspace{1em}
+
+	To download the installer script:
+
 \begin{minted}{sh}
-$ curl https://sh.rustup.rs -sSf | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+  -o rustup.sh
 \end{minted}
-    \pause Obviously you shouldn't do that ;)
-    \item Alternatively you can use \url{https://play.rust-lang.org/}
-\end{itemize}
 \end{frame}
 
 \subsection{Cargo, Rust's Package Manager}
@@ -36,6 +30,7 @@ $ curl https://sh.rustup.rs -sSf | sh
         \item Fetches and builds your project’s dependencies
         \item Invokes rustc or another build tool with the correct parameters
             to build your project
+        \item Has built-in support for cross-compilation
     \end{itemize}
 \end{frame}
 \begin{frame}[fragile]{Cargo -- Create a New Project}
@@ -101,7 +96,7 @@ $ cargo build
 \end{frame}
 
 \begin{frame}[fragile,c]{Cargo -- Testing}
-	Rust has integrated unit testing\footnote{\url{https://doc.rust-lang.org/book/testing.html}}
+	Rust has integrated unit testing\footnote{\url{https://doc.rust-lang.org/book/ch11-00-testing.html}}
 
 \begin{minted}{rust}
 #[test]
