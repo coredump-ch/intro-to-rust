@@ -139,7 +139,7 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
 %%%
 
 \begin{frame}[fragile]{Structs}
-\pause\begin{minted}{rust}
+\begin{minted}{rust}
 pub struct Point {
   x: f64,
   y: f64,
@@ -153,7 +153,7 @@ impl Point {
     Point { x: 0.0, y: 0.0 }
   }
   pub fn distance_from_zero(&self) -> f64 {
-    (self.x*self.x + self.y*self.y).sqrt()
+    (self.x * self.x + self.y * self.y).sqrt()
   }
 }
 \end{minted}
@@ -206,27 +206,36 @@ match color {
 
 \begin{frame}[fragile]{Enums with data}
 \begin{columns}[t,onlytextwidth]
-\column{.37\textwidth}
+\column{.42\textwidth}
 \begin{minted}{rust}
+pub struct MyCircle {
+  radius: f64,
+}
+pub struct MySquare {
+  side: f64,
+}
 pub enum Shape {
-  Circle{radius: f64},
-  Square{side: f64},
+  Circle(MyCircle),
+  Square(MySquare),
 }
 \end{minted}
-\column{.63\textwidth}
+\column{.58\textwidth}
 \pause\begin{minted}{rust}
-let shape = Shape::Circle{radius: 1.0};
+let shape = Shape::Circle(MyCircle {
+  radius: 1.0,
+});
 match shape {
-  Shape::Circle{radius} => {
-    println!("Circle with radius {}", radius)
+  Shape::Circle(c) => {
+    println!("Circle (r={})", c.radius);
   }
   _ => panic!("Must be a circle!"),
 }
 \end{minted}
 \end{columns}
 \begin{itemize}
-  \item<1-> A \texttt{Shape} is Either a \texttt{Circle} with \texttt{radius} or a
-    \texttt{Square} with \texttt{side}
+  \item<1-> A \texttt{Shape} is Either a \texttt{Circle} containing
+    \texttt{MyCircle} or a
+    \texttt{Square} containing \texttt{MySquare}
   \item<2-> We can use match to "extract" data
 \end{itemize}
 \end{frame}
@@ -285,7 +294,7 @@ impl HasArea for Square {
 \begin{frame}[fragile]{Trait Based Generics}
 
 \begin{minted}{rust}
-pub fn print_area<Shape: HasArea>(shape: &Shape) {
+pub fn print_area<S: HasArea>(shape: &S) {
   println!("{}", shape.area());
 }
 \end{minted}
@@ -293,8 +302,10 @@ pub fn print_area<Shape: HasArea>(shape: &Shape) {
 \begin{minted}{rust}
 ...
 
-print_area(&Circle{x: 1.0, y: 2.0, radius: 3.0}); // Shape is Circle
-print_area(&Square{x: 4.0, y: 5.0, side: 5.0}); // Shape is Square
+// Shape is Circle
+print_area(&Circle{x: 1.0, y: 2.0, radius: 3.0});
+// Shape is Square
+print_area(&Square{x: 4.0, y: 5.0, side: 5.0});
 \end{minted}
 
 \end{frame}
@@ -314,6 +325,7 @@ struct Coords<T> {
 
 Coords { x: 200, y: 800 }  // OK
 Coords { x: 1.3, y: 4.7 }  // Also OK
+Coords { x: 1.3, y: 100 }  // Not OK
 \end{minted}
 \end{frame}
 
@@ -334,9 +346,10 @@ enum Option<T> {
 \begin{minted}{rust}
 fn safe_div(n: i32, d: i32) -> Option<i32> {
   if d == 0 {
-    return None;
+    None
+  } else {
+    Some(n / d)
   }
-  Some(n / d)
 }
 \end{minted}
 \end{frame}
@@ -348,6 +361,14 @@ fn safe_div(n: i32, d: i32) -> Option<i32> {
 match safe_div(num, denom) {
   None => println!("No quotient."),
   Some(v) => println!("Quotient is {}.", v)
+}
+
+// ...or
+
+if let Some(q) = safe_div(num, denom) {
+  println!("Quotient is {}", q);
+} else {
+  println!("No quotient.");
 }
 \end{minted}
 \end{frame}
