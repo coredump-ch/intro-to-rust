@@ -69,28 +69,34 @@ It's good practice to define your own error types instead of using strings.
 
 \begin{frame}[fragile]{But \texttt{Result} can get tedious...}
 \begin{minted}{rust}
-fn do_calc() -> Result<i32, String> {
-    let a = match do_subcalc1() {
+fn do_calc(a: i32, b: i32, c: i32) -> Result<i32, Error> {
+    let tmp = match safe_div(a, b) {
         Ok(val) => val,
-        Err(msg) => return Err(msg),
+        Err(e) => return Err(e),
     };
-    let b = match do_subcalc2() {
+    let res = match save_div(tmp, c) {
         Ok(val) => val,
-        Err(msg) => return Err(msg),
+        Err(e) => return Err(e),
     };
-    Ok(a + b)
+    Ok(res)
 }
 \end{minted}
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Ergonomic error handling with the \texttt{try!} macro}
+\begin{frame}[fragile]{Ergonomic error handling with the \texttt{?} operator}
 \begin{minted}{rust}
-fn do_calc() -> Result<i32, String> {
-    let a = try!(do_subcalc1());
-    let b = try!(do_subcalc2());
-    Ok(a + b)
+fn do_calc(a: i32, b: i32, c: i32) -> Result<i32, Error> {
+    let tmp = safe_div(a, b)?;
+    let res = safe_div(tmp, c)?;
+    Ok(res)
+}
+
+// ...or chained
+
+fn do_calc(a: i32, b: i32, c: i32) -> Result<i32, Error> {
+    Ok(safe_div(safe_div(a, b)?, c)?)
 }
 \end{minted}
 \pause
@@ -105,13 +111,13 @@ What if the signature does not match?
 Then we can use map\_err():
 \begin{minted}{rust}
 fn do_subcalc() -> Result<i32, String> { ... }
+
 fn do_calc() -> Result<i32, Error> {
-    let res = do_subcalc();
-    let mapped = res.map_err(|msg| {
-        println!("Error: {}", msg);
-        Error::CalcFailed
-    });
-    let val = try!(mapped);
+    let val = do_subcalc()
+        .map_err(|msg| {
+            println!("Error: {}", msg);
+            Error::CalcFailed
+        })?;
     Ok(val + 1)
 }
 \end{minted}
@@ -121,14 +127,34 @@ fn do_calc() -> Result<i32, Error> {
 
 \begin{frame}[fragile]{Mapping Errors: A closer look}
 \begin{minted}{rust}
-let mapped = res.map_err(|msg| Error::CalcFailed);
+let mapped = do_subcalc().map_err(|msg| Error::CalcFailed);
 \end{minted}
 ...is the same as...
 \begin{minted}{rust}
-let mapped = match res {
+let mapped = match do_subcalc() {
     Ok(val) => Ok(val),
     Err(msg) => Err(Error::CalcFailed),
 }
 \end{minted}
 \end{frame}
 
+%%%
+
+\begin{frame}[fragile]{Mapping Errors: Implicit conversion}
+The \texttt{?} operator even allows for implicit conversion if the
+\texttt{From<OtherError>} trait is implemented for your error type, or if the
+other error type implements \texttt{Into<YourError>}.
+
+\begin{minted}{rust}
+enum MyError {
+    Io(io::Error),
+    GenericMessage(String),
+}
+
+impl std::convert::From<io::Error> for MyError {
+    fn from(error: io::Error) -> Self {
+        MyError::Io(error)
+    }
+}
+\end{minted}
+\end{frame}
