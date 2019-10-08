@@ -166,7 +166,7 @@ Data: [0, 1, 2]
 \end{frame}
 
 \begin{frame}[fragile]{Channels}
-Besides threading, you can also use channels:
+To simplify communication with Threads, you can also use channels:
 \begin{minted}{rust}
 use std::sync::mpsc::channel;
 \end{minted}
@@ -174,4 +174,22 @@ Signature:
 \begin{minted}{rust}
 fn channel<T>() -> (Sender<T>, Receiver<T>)
 \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Async / Await}
+Brand new: Startin with 1.39, Rust has built-in async / await syntax!
+\begin{minted}{rust}
+async fn first_function() -> u32 { .. }
+\end{minted}
+
+This function implicitly returns a \texttt{Future<u32>}. To wait
+for the result in another async function:
+
+\begin{minted}{rust}
+async fn another_function() {
+    let result: u32 = first_function().await;
+}
+\end{minted}
+
+...but that's out of scope for this talk.
 \end{frame}
