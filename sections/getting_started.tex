@@ -4,13 +4,12 @@
 
 \begin{frame}[fragile]{Rustup}
 	The best way to install and update the Rust toolchain is rustup
-	(\url{https://rustup.rs/}).
-
-	It makes it easy to:
+	(\url{https://rustup.rs/}). Among other things, it handles:
 
 	\begin{itemize}
-		\item Install different Rust versions
-		\item Install cross compilation toolchains
+		\item installing different Rust versions
+		\item installing cross compilation toolchains
+		\item installing language components like autocompletion or code formatting
 	\end{itemize}
 
 	\vspace{1em}
@@ -21,6 +20,10 @@
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
   -o rustup.sh
 \end{minted}
+
+	\vspace{1em}
+
+	(\ldots{}or if you just want to try Rust without installing, use \url{play.rust-lang.org})
 \end{frame}
 
 \subsection{Cargo, Rust's Package Manager}
