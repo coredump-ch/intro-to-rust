@@ -158,3 +158,20 @@ impl std::convert::From<io::Error> for MyError {
 }
 \end{minted}
 \end{frame}
+
+%%%
+
+\begin{frame}[fragile]{Error handling for the lazy}
+If an error is impossible to occur, or if you don't want to handle the error at
+all, you can \texttt{unwrap()} or \texttt{expect(msg)} the result.
+
+\begin{minted}{rust}
+let val: u32 = "42".parse().unwrap();
+let val: u32 = "42".parse().expect("Failed to parse integer");
+\end{minted}
+
+If the result is successful, it will return the contents. Otherwise,
+the program will panic.
+
+The \texttt{unwrap} and \texttt{expect} methods works for \texttt{Option}s too!
+\end{frame}
