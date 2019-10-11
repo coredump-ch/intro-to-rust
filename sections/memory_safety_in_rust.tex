@@ -6,9 +6,10 @@
 
 To guarantee memory safety, Rust gives us three key promises:
 
+\pause
+
 \begin{itemize}
 	\item No null pointer dereferences
-		\pause
 		\begin{itemize}
 			\item There are no null pointers in safe Rust
 			\item For error handling and control flow, \texttt{Option} and
@@ -16,14 +17,12 @@ To guarantee memory safety, Rust gives us three key promises:
 		\end{itemize}
 	\pause
 	\item No dangling pointers
-		\pause
 		\begin{itemize}
 			\item The concepts of "ownership", "borrowing" and "lifetimes" prevent the
 				use of uninitialized or freed pointers
 		\end{itemize}
 	\pause
 	\item No buffer overruns
-		\pause
 		\begin{itemize}
 		\item There's no pointer arithmetic in safe Rust
 		\item Arrays in Rust are not just pointers

@@ -18,17 +18,17 @@
 \begin{frame}[label={threerules}]{Three Rules}
 
 \begin{block}{Rule 1}
-Every value has a single owner at any given time.
+Every value has a single \textbf{owner} at any given time.
 \end{block}
 \pause
 \begin{block}{Rule 2}
-You can borrow a reference to a value, so long as the
+You can \textbf{borrow} a reference to a value, so long as the
 reference doesn’t outlive the value.
 \end{block}
 \pause
 \begin{block}{Rule 3}
-You can only modify a value when you have exclusive
-access to it.
+You can only modify (mutate) a value when you have \textbf{exclusive}
+(mutable) access to it.
 \end{block}
 
 \end{frame}
@@ -145,13 +145,16 @@ println!("{}", s);
 \sep
 
 \begin{minted}[fontsize=\footnotesize]{text}
-error: use of moved value: `s`
-println!(“{}”, s);
-               ^
-note: `s` moved here because it has type `collections::string::String`,
-which is non-copyable
-print_loud(s);
-           ^
+error[E0382]: borrow of moved value: `s`
+ --> src/main.rs:8:20
+  |
+6 |     let s = "Hello, hackers".to_string();
+  |         - move occurs because `s` has type `std::string::String`,
+  |           which does not implement the `Copy` trait
+7 |     print_loud(s);
+  |                - value moved here
+8 |     println!("{}", s);
+  |                    ^ value borrowed here after move
 \end{minted}
 
 \end{frame}
@@ -201,65 +204,57 @@ dangling pointer.
 let x = String::new();
 let borrow = &x;
 let y = x;
+println!("Borrowed value is {}", borrow);
 \end{minted}
 
 \sep
 
 \begin{minted}[fontsize=\footnotesize]{text}
-error: cannot move out of `x` because it is borrowed [E0505]
-    let y = x;
-            ^
-note: borrow of `x` occurs here
-    let borrow = &x;
-                  ^
+error[E0505]: cannot move out of `x` because it is borrowed
+ --> src/main.rs:4:13
+  |
+3 |     let borrow = &x;
+  |                  -- borrow of `x` occurs here
+4 |     let y = x;
+  |             ^ move out of `x` occurs here
+5 |     println!("Borrowed value is {}", borrow);
+  |                                      ------ borrow later used here
 \end{minted}
 
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Lifetimes}
+\begin{frame}[fragile]{Lifetimes: A contrived example}
 
 What's the problem here?
 
 \begin{minted}{rust}
-let borrow;
-let x = String::new();
-borrow = &x;
-\end{minted}
-
-\sep
-
-\begin{minted}[fontsize=\footnotesize]{text}
-error: `x` does not live long enough
+let borrow: &String;
+{
+    let x = String::new();
     borrow = &x;
-              ^
+}
+println!("Borrowed val is {}", borrow);
 \end{minted}
-
 \end{frame}
 
 %%%
 
-\begin{frame}[fragile]{Lifetimes}
+\begin{frame}[fragile]{Lifetimes: A contrived example}
 
 The lifetime of the borrow is longer than the lifetime of `x`.
 
-\begin{minted}[fontsize=\footnotesize]{rust}
-let borrow;
-let x = String::new();
-borrow = &x;
-\end{minted}
-
-This can also be visualized differently:
-
-\begin{minted}[fontsize=\footnotesize]{rust}
-{
-    let borrow;
-    {
-        let x = String::new();
-        borrow = &x;
-    }
-}
+\begin{minted}[fontsize=\footnotesize]{text}
+error[E0597]: `x` does not live long enough
+ --> src/main.rs:5:18
+  |
+5 |         borrow = &x;
+  |                  ^^ borrowed value does not live long enough
+6 |     }
+  |     - `x` dropped here while still borrowed
+7 |     println!("Borrowed val is {}", borrow);
+  |                                    ------ borrow later used here
 \end{minted}
 
 Using lifetime checking, the compiler guarantees that there are no dangling

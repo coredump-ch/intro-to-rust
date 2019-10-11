@@ -27,23 +27,32 @@ let t1 = thread::spawn(|| { data.push(19); });
 \end{minted}
 \sep
 \begin{minted}[fontsize=\footnotesize]{text}
-error: closure may outlive the current function, but it borrows `data`,
-which is owned by the current function [E0373]
-    let t1 = thread::spawn(|| {
-        data.push(19);
-    });
-note: `data` is borrowed here
-    data.push(19);
-    ^~~~
-help: to force the closure to take ownership of `data` (and any other
-referenced variables), use the `move` keyword, as shown:
-     let t1 = thread::spawn(move || {
-         data.push(19);
-     });
+error[E0373]: closure may outlive the current function, but it borrows `data`,
+              which is owned by the current function
+ --> src/main.rs:5:28
+  |
+5 |     let t1 = thread::spawn(|| { data.push(19); });
+  |                            ^^   ---- `data` is borrowed here
+  |                            |
+  |                            may outlive borrowed value `data`
+  |
+note: function requires argument type to outlive `'static`
+ --> src/main.rs:5:14
+  |
+5 |     let t1 = thread::spawn(|| { data.push(19); });
+  |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 \end{minted}
 \end{frame}
 
 \begin{frame}[fragile]{Shared Data (2) -- Move data}
+The compiler also gives us a helpful hint:
+\begin{minted}[fontsize=\footnotesize]{text}
+help: to force the closure to take ownership of `data` (and any
+      other referenced variables), use the `move` keyword
+  |
+5 |     let t1 = thread::spawn(move || { data.push(19); });
+  |                            ^^^^^^^
+\end{minted}
 Let's move the \texttt{data} into the Thread.
 \begin{minted}{rust}
 let mut data = vec![0];
@@ -61,14 +70,16 @@ println!("Data: {:?}", data);
 \end{minted}
 \sep
 \begin{minted}[fontsize=\footnotesize]{text}
-error: use of moved value: `data` [E0382]
-    println!("Data: {:?}", data);
-                           ^~~~
-note: `data` moved into closure environment here because it has
-type `collections::vec::Vec<i32>`, which is non-copyable
-    let t1 = thread::spawn(move || { data.push(19); });
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-help: perhaps you meant to use `clone()`?
+error[E0382]: borrow of moved value: `data`
+4 |     let mut data = vec![0];
+  |         -------- move occurs because `data` has type `std::vec::Vec<i32>`,
+  |                  which does not implement the `Copy` trait
+5 |     let t1 = thread::spawn(move || { data.push(19); });
+  |                            -------   ---- variable moved due to use
+  |                            |              in closure
+  |                            value moved into closure here
+7 |     println!("Data: {:?}", data);
+  |                            ^^^^ value borrowed here after move
 \end{minted}
 \end{frame}
 
@@ -96,19 +107,19 @@ Data: [0]
 \begin{minted}{rust}
 let data = Arc::new(vec![0]);
 
-let mut data2 = data.clone();
-let t1 = thread::spawn(move || {
-    data2.push(1);
-});
+let data2 = data.clone();
+let t1 = thread::spawn(move || { data2.push(1); });
 
 t1.join().unwrap();
 println!("Data: {:?}", data);
 \end{minted}
 \sep
 \begin{minted}[fontsize=\footnotesize]{text}
-error: cannot borrow immutable borrowed content as mutable
-    data2.push(1);
-    ^~~~~
+error[E0596]: cannot borrow data in a `&` reference as mutable
+ --> src/main.rs:8:38
+  |
+8 |     let t1 = thread::spawn(move || { data2.push(1); });
+  |                                      ^^^^^ cannot borrow as mutable
 \end{minted}
 \end{frame}
 
@@ -123,7 +134,7 @@ let t1 = thread::spawn(move || {
 });
 
 t1.join().unwrap();
-println!("Data: {:?}", *data.lock().unwrap());
+println!("Data: {:?}", data.lock().unwrap());
 \end{minted}
 \sep
 \begin{minted}[fontsize=\footnotesize]{text}
@@ -155,7 +166,7 @@ Data: [0, 1, 2]
 \end{frame}
 
 \begin{frame}[fragile]{Channels}
-Besides threading, you can also use channels:
+To simplify communication with Threads, you can also use channels:
 \begin{minted}{rust}
 use std::sync::mpsc::channel;
 \end{minted}
@@ -163,4 +174,22 @@ Signature:
 \begin{minted}{rust}
 fn channel<T>() -> (Sender<T>, Receiver<T>)
 \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Async / Await}
+Brand new: Startin with 1.39, Rust has built-in async / await syntax!
+\begin{minted}{rust}
+async fn first_function() -> u32 { .. }
+\end{minted}
+
+This function implicitly returns a \texttt{Future<u32>}. To wait
+for the result in another async function:
+
+\begin{minted}{rust}
+async fn another_function() {
+    let result: u32 = first_function().await;
+}
+\end{minted}
+
+...but that's out of scope for this talk.
 \end{frame}
