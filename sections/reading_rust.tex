@@ -8,7 +8,9 @@
     assert!(n != 0 && m != 0);
     while m != 0 \{
         if m < n \{
-            let t = m; m = n; n = t;
+            let t = m;
+            m = n;
+            n = t;
         \}
         m = m % n;
     \}
@@ -25,7 +27,9 @@ fn gcd(\hi{mut} n: u64, \hi{mut} m: u64) -> u64 \{
     assert!(n != 0 && m != 0);
     while m != 0 \{
         if m < n \{
-            let t = m; m = n; n = t;
+            let t = m;
+            m = n;
+            n = t;
         \}
         m = m % n;
     \}
@@ -42,7 +46,9 @@ fn gcd(mut \hi{n: u64}, mut \hi{m: u64}) -> u64 \{
     assert!(n != 0 && m != 0);
     while m != 0 \{
         if m < n \{
-            let t = m; m = n; n = t;
+            let t = m;
+            m = n;
+            n = t;
         \}
         m = m % n;
     \}
@@ -59,7 +65,9 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
     \hi{assert!}(n != 0 && m != 0);
     while m != 0 \{
         if m < n \{
-            let t = m; m = n; n = t;
+            let t = m;
+            m = n;
+            n = t;
         \}
         m = m % n;
     \}
@@ -76,7 +84,9 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
     assert!(n != \hi{0} && m != \hi{0});
     while m != \hi{0} \{
         if m < n \{
-            let t = m; m = n; n = t;
+            let t = m;
+            m = n;
+            n = t;
         \}
         m = m % n;
     \}
@@ -93,7 +103,9 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
     assert!(n != 0 && m != 0);
     while m != 0 \{
         if m < n \{
-            \hi{let t = m}; m = n; n = t;
+            \hi{let t = m};
+            m = n;
+            n = t;
         \}
         m = m % n;
     \}
@@ -110,7 +122,9 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
     assert!(n != 0 && m != 0);
     \hi{while m != 0 \{}
         \hi{if m < n \{}
-            let t = m; m = n; n = t;
+            let t = m;
+            m = n;
+            n = t;
         \hi{\}}
         m = m % n;
     \hi{\}}
@@ -127,7 +141,9 @@ fn gcd(mut n: u64, mut m: u64) -> u64 \{
     assert!(n != 0 && m != 0);
     while m != 0 \{
         if m < n \{
-            let t = m; m = n; n = t;
+            let t = m;
+            m = n;
+            n = t;
         \}
         m = m % n;
     \}
